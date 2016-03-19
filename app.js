@@ -15,6 +15,12 @@ var hbs;
 
 // For gzip compression
 app.use(express.compress());
+var mongoose = require('mongoose');
+var User = require('./models/User');
+var Platform = require('./models/Platform');
+var Score = require('./models/Score');
+mongoose.connect('mongodb://localhost/trustscore');
+
 
 var passport = require('passport');
 var passport_config = require('./config/passport');
@@ -23,12 +29,6 @@ var jwt = require('express-jwt');
 var auth = jwt({secret: 'SECRET', userPropert: 'payload'});
 
 app.use(passport.initialize());
-
-var mongoose = require('mongoose');
-var User = require('./models/User');
-var Platform = require('./models/Platform');
-var Score = require('./models/Score');
-mongoose.connect('mongodb://localhost/trustscore');
 
 
 /*
@@ -155,12 +155,28 @@ app.get('/user/:user_id', auth, function(req, res, next) {
   res.json(req.user)
 });
 
+app.get('/user/scores/:user_id', auth, function(req, res, next){
+  var score_ids = req.user.scores;
+  var arr = [];
+  for(var score_id in score_ids) {
+    arr.push(Score.findById(score_id));
+  }
+  res.json(arr);
+});
+
 app.get('/platform/:platform_id', auth, function(req, res, next) {
   res.json(req.platform)
 });
 
 app.get('/score/:score_id', auth, function(req, res, next) {
   res.json(req.score);
+});
+
+app.get('/platforms', auth, function(req, res, next) {
+  Platform.find(function(err, platforms){
+    if(err){return next(err);}
+    res.json(platforms);
+  });
 });
 
 /*
