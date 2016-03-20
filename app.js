@@ -5,7 +5,7 @@
  */
 var express = require('express');
 var app = express();
-var port = 3000;
+var port = 9000;
 
 /*
  * Use Handlebars for templating
@@ -102,6 +102,7 @@ app.post('/login', function(req, res, next) {
     if(err) {return next(err);}
 
     if(user) {
+      console.log(user.generateJWT());
       return res.json({token: user.generateJWT()})  ;
     } else {
       return res.status(401).json(info);
@@ -109,14 +110,14 @@ app.post('/login', function(req, res, next) {
   })(req, res, next);
 });
 
-/*
+
 app.get('/users', function(req, res, next) {
   User.find(function(err, users) {
     if(err) {return next(err);}
     res.json(users);
   });
 });
-*/
+
 
 app.param('user_id', function(req, res, next, id) {
   var query = User.findById(id);
@@ -172,8 +173,8 @@ app.get('/score/:score_id', auth, function(req, res, next) {
   res.json(req.score);
 });
 
-app.get('/platforms', auth, function(req, res, next) {
-  Platform.find(function(err, platforms){
+app.get('/platforms', function(req, res, next) {
+  Platform.find({}, '_id name', function(err, platforms){
     if(err){return next(err);}
     res.json(platforms);
   });
@@ -182,5 +183,5 @@ app.get('/platforms', auth, function(req, res, next) {
 /*
  * Start it up
  */
-app.listen(process.env.PORT || port);
+app.listen(port);
 console.log('Express started on port ' + port);

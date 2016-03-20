@@ -105,7 +105,7 @@ module.exports = function (grunt) {
         // Open Config
         open: {
             site: {
-                path: 'http://localhost:3000',
+                path: 'http://localhost:9000',
                 app: 'firefox'
             },
             editor: {
