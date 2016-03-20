@@ -5,7 +5,7 @@
  */
 var express = require('express');
 var app = express();
-var port = 9000;
+var port = 3030;
 
 /*
  * Use Handlebars for templating
@@ -15,6 +15,7 @@ var hbs;
 
 // For gzip compression
 app.use(express.compress());
+var cors = require('cors');
 var mongoose = require('mongoose');
 var User = require('./models/User');
 var Platform = require('./models/Platform');
@@ -28,6 +29,9 @@ var passport_config = require('./config/passport');
 var jwt = require('express-jwt');
 var auth = jwt({secret: 'SECRET', userPropert: 'payload'});
 
+//CORS middleware to allow us to access different urls in our localhost
+app.use(cors());
+//Add passport init
 app.use(passport.initialize());
 
 

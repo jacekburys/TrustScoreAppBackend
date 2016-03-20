@@ -105,7 +105,7 @@ module.exports = function (grunt) {
         // Open Config
         open: {
             site: {
-                path: 'http://localhost:9000',
+                path: 'http://localhost:3030',
                 app: 'firefox'
             },
             editor: {
@@ -266,7 +266,7 @@ module.exports = function (grunt) {
     // Restart
     grunt.registerTask('restart', 'Restart the server.', [
         'express:dev',
-        'watch'
+	'watch'
     ]);
     
 
